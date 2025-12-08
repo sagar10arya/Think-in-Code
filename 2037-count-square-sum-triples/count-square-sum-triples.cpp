@@ -7,10 +7,9 @@ public:
         {
             for(int b=1;b<=n; b++)
             {
-                for(int c = 1; c<=n; c++)
-                {
-                    if(a*a + b*b == c*c) count++;
-                }
+                int x = a*a + b*b;
+                int c = sqrt(x);
+                if(x == c*c && c <= n) count++;
             }
         }
         return count;
