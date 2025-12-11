@@ -1,6 +1,6 @@
 class Solution {
 public:
-    // Time: O(n² log n)
+    // Time: O(n log n) + O(n^2)  -> O(n^2)
     // Space: O(1), not considering o/p storage
     vector<vector<int>> threeSum(vector<int>& nums) {
         sort(nums.begin(), nums.end());
@@ -14,7 +14,7 @@ public:
             int k = n-1;    // right pointer
             while(j<k){
                 int sum = nums[i] + nums[j] + nums[k];
-                if(sum < 0) j++;    // n a bigger sum → move left pointer to right
+                if(sum < 0) j++;    // need a bigger sum → move left pointer to right
                 else if(sum > 0) k--;   // need a smaller sum → move right pointer to left
                 else{ // sum == 0
                     ans.push_back({nums[i], nums[j], nums[k]});
