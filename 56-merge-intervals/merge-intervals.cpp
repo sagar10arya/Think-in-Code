@@ -1,6 +1,6 @@
 class Solution {
 public:
-    // Time: O(n logn) + O(2N) -> O(N^2)
+    // Time: O(n logn) + O(N)
     vector<vector<int>> merge(vector<vector<int>>& intervals) {
         int n = intervals.size();
         sort(intervals.begin(), intervals.end());
@@ -8,19 +8,14 @@ public:
 
         for(int i=0; i<n; i++)
         {
-            // start of current merged interval
-            int start = intervals[i][0];
-            int end = intervals[i][1];
-            if(!ans.empty() && end <= ans.back()[1]) continue;
-
-            for(int j=i+1; j<n; j++)
-            {
-                if(intervals[j][0] <= end){
-                    end = max(end, intervals[j][1]);
-                }
-                else break;
+            // ff merged is empty or current interval does not overlap
+            if(ans.empty() || intervals[i][0] > ans.back()[1]){
+                ans.push_back(intervals[i]);
             }
-            ans.push_back({start, end});
+            else{
+                // overlapping: merge by extending the end time
+                ans.back()[1] = max(ans.back()[1], intervals[i][1]);
+            }
         }
 
 
