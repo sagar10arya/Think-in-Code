@@ -1,26 +1,30 @@
 class Solution {
 public:
     void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
-        int i = 0, j = 0;
-        vector<int> merged;
-        while(i<m && j<n)
+        // nums1 has size (m + n), but only first m elements are valid
+        int left = m-1;
+        int right = 0;
+        while(left >= 0 && right < n)
         {
-            if(nums1[i] < nums2[j]){
-                merged.push_back(nums1[i]);
-                i++;
+            if(nums1[left] > nums2[right]){
+                swap(nums1[left], nums2[right]);
+                right++;
+                left--;
             }
-            else{
-                merged.push_back(nums2[j]);
-                j++;
+            else {
+                // If nums1[left] <= nums2[right],
+                // remaining elements are already in correct relative order
+                break;
             }
         }
 
-        while(i<m) merged.push_back(nums1[i++]);
+        sort(nums1.begin(), nums1.begin() + m);
+        sort(nums2.begin(), nums2.begin() + n);
 
-        while(j<n) merged.push_back(nums2[j++]);
-
-        for(int k=0; k<m+n; k++){
-            nums1[k] = merged[k];
+        // Copy sorted nums2 into nums1 starting at index m
+        for(int i=0; i<n; i++)
+        {
+            nums1[m+i] = nums2[i];
         }
     }
 };
