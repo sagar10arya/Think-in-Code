@@ -1,46 +1,47 @@
 class Solution {
 public:
-    int lower_bound(vector<int>& nums, int target)
+    int first_occurence(vector<int>& nums, int target)
     {
         int n = nums.size();
         int low = 0, high = n-1;
-        int ans = n;
+        int first = -1;
         while(low <= high)
         {
             int mid = low + (high - low) / 2;
-            if(nums[mid] >= target){
-                ans = mid;
+            if(nums[mid] == target){
+                first = mid;
                 high = mid - 1;
             }
-            else low = mid + 1;
+            else if(nums[mid] < target) low = mid + 1;
+            else high = mid -1;
         }
-        return ans;
+        return first;
     }
 
-    int upper_bound(vector<int>& nums, int target)
+    int last_occerence(vector<int>& nums, int target)
     {
         int n = nums.size();
         int low = 0, high = n-1;
-        int ans = n;
+        int last = -1;
         while(low <= high)
         {
             int mid = low + (high - low) / 2;
-            if(nums[mid] > target){
-                ans = mid;
-                high = mid - 1;
+            if(nums[mid] == target){
+                last = mid;
+                low = mid + 1;
             }
-            else low = mid + 1;
+            else if(nums[mid] < target) low = mid + 1;
+            else high = mid - 1;
         }
-        return ans;
+        return last;
     }
     
     // time --> 2 O(log n)
     vector<int> searchRange(vector<int>& nums, int target) {
-        int n = nums.size();
-        int lowerBound = lower_bound(nums, target);
-        if(lowerBound == n || nums[lowerBound] != target ) return {-1, -1};
-        int upperBound = upper_bound(nums, target);
+        int first = first_occurence(nums, target);
+        if(first == -1) return {-1, -1};
+        int last = last_occerence(nums, target);
 
-        return {lowerBound, upperBound - 1};
+        return {first, last};
     }
 };
