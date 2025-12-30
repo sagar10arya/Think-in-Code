@@ -6,14 +6,14 @@ public:
         // Edge case: only one element, that element itself is a peak
         if(n == 1) return 0;
 
-        // Check if the last element is a peak
-        // Last element has only one neighbor (left)
+        // Check if the first element is a peak
+        // First element has only one neighbor (right)
         if(nums[0] > nums[1]) return 0;
 
         // Check if the last element is a peak
         // Last element has only one neighbor (left)
         if(nums[n-1] > nums[n-2]) return n - 1;
-        int low = 1, high = n-2;
+        int low = 1 , high = n-2;
         while(low<=high)
         {
             int mid = low + (high - low) / 2;
