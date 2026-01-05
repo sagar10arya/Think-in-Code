@@ -1,13 +1,17 @@
 class Solution {
 public:
-    // TC: Time Complexity: O(N)
+    // TC:O(log N)
+    // SC: O(1)
     int findKthPositive(vector<int>& arr, int k) {
         int n = arr.size();
-        for(int i=0; i<n; i++)
+        int low=0, high=n-1;
+        while(low <= high)
         {
-            if(arr[i] <= k) k++;    // if current number is <= to k, increment k
-            else break;
+            int mid = low + (high - low) / 2;
+            int missing = arr[mid] -(mid + 1);
+            if(missing < k) low = mid + 1;
+            else high = mid - 1;
         }
-        return k;    // final value of k which is the missing number
+        return low + k; // high + 1 + k 
     } 
 };
