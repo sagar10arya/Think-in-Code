@@ -10,34 +10,21 @@
  */
 class Solution {
 public:
-    // TC: O(2N), SC: O(N) --> brute force
+    // TC: O(N), SC: O(1)
     ListNode* oddEvenList(ListNode* head) {
         if(head == NULL || head->next == NULL) return head;
-        ListNode* temp = head;
-        vector<int> arr;  // stores nodes values
-        // odd indices nodes
-        while(temp != NULL && temp->next != NULL)
-        {
-            arr.push_back(temp->val);
-            temp = temp->next->next; // move to next odd index
-        }
-        if(temp) arr.push_back(temp->val);  // If list length is odd, last odd node is missed in loop
+        
+        ListNode* odd = head; // odd pointer starts from first node
+        ListNode* even = head->next;  // even pointer starts from second node
+        ListNode* evenHead = head->next; // store even Head to attach later
 
-        //even indices nodes
-        temp = head->next; // start from second node (index 2)
-        while(temp != NULL && temp->next != NULL)
-        {
-            arr.push_back(temp->val);
-            temp = temp->next->next; // move to next even index
+        while(even != NULL && even->next != NULL){
+            odd->next = odd->next->next;
+            even->next = even->next->next;
+            odd = odd->next;
+            even = even->next;
         }
-
-        // overwrite original list
-        temp = head;
-        for(int i=0; i<arr.size(); i++)
-        {
-            temp->val = arr[i];
-            temp = temp->next;
-        }
+        odd->next = evenHead;  // attach odd->even
 
         return head;
     }
