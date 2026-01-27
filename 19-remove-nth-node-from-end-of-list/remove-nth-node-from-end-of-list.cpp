@@ -10,35 +10,26 @@
  */
 class Solution {
 public:
-    // TC: O(2n) --> brute force 2 passes
+    // TC: O(length), SC: O(1)
     ListNode* removeNthFromEnd(ListNode* head, int n) {
-        ListNode* temp = head;
-        // count nodes
-        int cnt = 0;
-        while(temp != NULL){
-            cnt++;
-            temp = temp->next;
-        }
-        // if heads need to be deleled
-        if(cnt == n){
-            ListNode* newHead = head->next;
+        ListNode* fast = head;
+        for(int i=0; i<n; i++) fast = fast->next;
+        // if fast becomes null after moving n step --> node to delete is head itself
+        if(fast == NULL){
+            ListNode* newHead= head->next;
             delete head;
             return newHead;
         }
-
-        // move to (cnt - n - 1)th node
-        int res = cnt - n;
-        temp = head;
-        while(temp != NULL){
-            res--;
-            if(res == 0) break;
-            temp = temp->next;
+        ListNode* slow = head;
+        // moving both pointers until the fast reaches the last node
+        while(fast->next != NULL){
+            slow = slow->next;
+            fast = fast->next;
         }
-
-        // delete nth node from end
-        ListNode* deleteNode = temp->next;
-        temp->next = temp->next->next;
-        delete deleteNode;
+        // slow->next is the node to delete
+        ListNode* deleteNthNode = slow->next;
+        slow->next = slow->next->next;
+        delete deleteNthNode;
 
         return head;
     }
