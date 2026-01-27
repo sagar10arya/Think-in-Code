@@ -24,6 +24,7 @@ class Solution {
         return prev;
     }
 public:
+    // TC: O(N), SC: O(1) :: optimal
     bool isPalindrome(ListNode* head) {
         if(head == NULL || head->next == NULL) return true;
         ListNode* slow = head;
