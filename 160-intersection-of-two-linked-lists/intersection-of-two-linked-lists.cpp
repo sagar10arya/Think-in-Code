@@ -7,24 +7,45 @@
  * };
  */
 class Solution {
+    // move the longer list ahead by d nodes, then compare to find interesection
+    ListNode* collisionPoint(ListNode* shorter, ListNode* longer, int d)
+    {
+        // move longer list ahead by d
+        while(d && longer != NULL){
+            d--;
+            longer = longer->next;
+        }
+        // now t1 and t2 have same length so we can start comparing
+        // move both pointers unitl the meet
+        while(shorter != NULL && longer != NULL){
+            if(shorter == longer) return shorter; // intersection found
+            shorter = shorter->next;
+            longer = longer->next;
+        }
+        return NULL;
+    }
 public:
-    // Brute force
-    // TC: O(n log n), n=lenght of listA+listB
-    // SC: O(N)
+    // Better
+    // TC: O(N1+2N2), SC: O(1)
     ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
-        map<ListNode*, int> mpp;
-        ListNode* temp = headA;
-        // store all nodes of listA
-        while(temp != NULL){
-            mpp[temp]++;
-            temp = temp->next;
+        ListNode* t1 = headA;
+        ListNode* t2 = headB;
+        int n1 = 0, n2 = 0;
+        while(t1 != NULL){
+            n1++;
+            t1 = t1->next;
         }
-        // traverse  listB and check intersection
-        temp = headB;
-        while(temp != NULL){
-            if(mpp.find(temp) != mpp.end()) return temp;
-            temp = temp->next;
+        while(t2 != NULL){
+            n2++;
+            t2 = t2->next;
         }
-        return NULL; // no intersection
+
+        if(n1 < n2){
+            // A is shorter, B is longer
+            return collisionPoint(headA, headB, n2 - n1);
+        } else{
+            // B is shorter, A is longer
+            return collisionPoint(headB, headA, n1 - n2);
+        }
     }
 };
