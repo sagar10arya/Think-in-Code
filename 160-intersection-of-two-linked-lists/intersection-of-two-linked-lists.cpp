@@ -7,45 +7,22 @@
  * };
  */
 class Solution {
-    // move the longer list ahead by d nodes, then compare to find interesection
-    ListNode* collisionPoint(ListNode* shorter, ListNode* longer, int d)
-    {
-        // move longer list ahead by d
-        while(d && longer != NULL){
-            d--;
-            longer = longer->next;
-        }
-        // now t1 and t2 have same length so we can start comparing
-        // move both pointers unitl the meet
-        while(shorter != NULL && longer != NULL){
-            if(shorter == longer) return shorter; // intersection found
-            shorter = shorter->next;
-            longer = longer->next;
-        }
-        return NULL;
-    }
 public:
-    // Better
-    // TC: O(N1+2N2), SC: O(1)
+    // TC: O(N1+N2), SC: O(1) : Optimal
     ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+        if(headA == NULL || headB == NULL) return NULL;
         ListNode* t1 = headA;
         ListNode* t2 = headB;
-        int n1 = 0, n2 = 0;
-        while(t1 != NULL){
-            n1++;
-            t1 = t1->next;
-        }
-        while(t2 != NULL){
-            n2++;
-            t2 = t2->next;
-        }
 
-        if(n1 < n2){
-            // A is shorter, B is longer
-            return collisionPoint(headA, headB, n2 - n1);
-        } else{
-            // B is shorter, A is longer
-            return collisionPoint(headB, headA, n1 - n2);
+        while(t1 != t2)
+        {
+            t1 = t1->next;
+            t2 = t2->next;
+
+            if(t1 == t2) return t1; // intersection point
+            if(t1 == NULL) t1 = headB;
+            if(t2 == NULL) t2 = headA;
         }
+        return t1;
     }
 };
