@@ -8,18 +8,29 @@
  */
 class Solution {
 public:
-    // brute force
-    // TC: O(N), SC: O(N)
+    // Optimal
+    // TC: O(N), SC: O(1)
     ListNode *detectCycle(ListNode *head) {
-        ListNode* temp = head;
-        unordered_set<ListNode*> st;
-        while(temp != NULL)
+        ListNode* slow = head;
+        ListNode* fast = head;
+
+        // detect cycle
+        while(fast != NULL && fast->next != NULL)
         {
-            // lookup and insertion -> O(1) : average
-            if(st.find(temp) != st.end()) return temp;
-            st.insert(temp);
-            temp = temp->next;
+            slow = slow->next;
+            fast = fast->next->next;
+            if(fast == slow) break;
         }
-        return NULL;
+
+        // no cycle
+        if(fast == NULL || fast->next == NULL) return NULL;
+
+        // find cycle start
+        ListNode* entry = head;
+        while(entry != slow){
+            entry = entry->next;
+            slow = slow->next;
+        }
+        return entry;
     }
 };
