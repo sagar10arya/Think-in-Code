@@ -15,16 +15,15 @@ public:
         if(head == NULL || head->next == NULL) return NULL;
         ListNode* slow = head;
         ListNode* fast = head;
-        ListNode* prev = NULL;
+        fast = fast->next->next;
 
         while(fast != NULL && fast->next != NULL)
         {
-            prev = slow;
             slow = slow->next;
             fast = fast->next->next;
         }
-        ListNode* middle = slow;
-        prev->next = slow->next;
+        ListNode* middle = slow->next;
+        slow->next = slow->next->next;
         delete middle;
         return head;
     }
