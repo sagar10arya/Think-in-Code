@@ -10,29 +10,22 @@
  */
 class Solution {
 public:
-    // TC: O(N + N/2), SC: O(1)
+    // TC: O(N/2), SC: O(1)
     ListNode* deleteMiddle(ListNode* head) {
         if(head == NULL || head->next == NULL) return NULL;
-        int cnt = 0;
-        ListNode* temp = head;
-        // count nodes
-        while(temp != NULL){
-            cnt++;
-            temp = temp->next;
-        }
-        int middleNodeBefore = cnt / 2; // one node before middle
-        temp = head;
-        while(temp != NULL){
-            middleNodeBefore--;
-            if(middleNodeBefore == 0)
-            {
-                ListNode* middleNode = temp->next;
-                temp->next = temp->next->next;
-                delete middleNode;
-            }
-            temp = temp->next;
-        }
+        ListNode* slow = head;
+        ListNode* fast = head;
+        ListNode* prev = NULL;
 
+        while(fast != NULL && fast->next != NULL)
+        {
+            prev = slow;
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        ListNode* middle = slow;
+        prev->next = slow->next;
+        delete middle;
         return head;
     }
 };
