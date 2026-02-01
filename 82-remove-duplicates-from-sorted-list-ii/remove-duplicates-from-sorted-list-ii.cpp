@@ -13,15 +13,17 @@ public:
     // TC: O(N), SC: O(1)
     ListNode* deleteDuplicates(ListNode* head) {
         ListNode* curr = head;
-        ListNode* prev = NULL; // last node that is unique and kept
+        ListNode* dummy = new ListNode(-1);
+        dummy->next = head; 
+        ListNode* prev = dummy;
         while(curr != NULL)
         {
             // duplicate group
             if(curr->next != NULL && curr->val == curr->next->val){
                 int val = curr->val;
                 while(curr != NULL && curr->val == val) curr = curr->next;
-                if(prev != NULL) prev->next = curr; // connect last valid node to next unqiue
-                else head = curr; // duplicate goup was head
+                
+                prev->next = curr;
             }
             // no duplicates 
             else{
@@ -29,6 +31,6 @@ public:
                 curr = curr->next;
             }
         }
-        return head;
+        return dummy->next;
     }
 };
