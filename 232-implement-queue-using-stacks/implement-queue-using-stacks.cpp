@@ -1,36 +1,44 @@
 class MyQueue {
+    // Amortized O(1):
+    // Each element is pushed once to input
+    // move once to ouput from input
+    // popped once from output
 public:
-    stack<int> s1;  // main
-    stack<int> s2;  // helper
+    stack<int> input;
+    stack<int> output;
 
     MyQueue() {
         
     }
     
-    void push(int x) {  // O(N)
-        while(!s1.empty()){
-            s2.push(s1.top());
-            s1.pop();
-        }
-        s1.push(x);
-        while(!s2.empty()){
-            s1.push(s2.top());
-            s2.pop();
-        }
+    void push(int x) {  //O(1)
+        input.push(x);
     }
     
-    int pop() { // O(1)
-        int ans = s1.top();
-        s1.pop();
+    int pop() {     // Amortized O(1)
+        if(output.empty()){
+            while(!input.empty()){
+                output.push(input.top());
+                input.pop();
+            }
+        }
+        int ans = output.top();
+        output.pop();
         return ans;
     }
     
-    int peek() {    // O(1)
-        return s1.top();
+    int peek() {    // Amortized O(1)
+        if(output.empty()){
+            while(!input.empty()){
+                output.push(input.top());
+                input.pop();
+            }
+        }
+        return output.top();
     }
     
     bool empty() {  // O(1)
-        return s1.empty();
+        return input.empty() && output.empty();
     }
 };
 
