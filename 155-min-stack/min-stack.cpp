@@ -1,30 +1,45 @@
 class MinStack {
 public:
-    // TC: O(1), SC: O(2N)
-    stack<pair<int, int>> st;
+    // TC: O(1), SC: O(N)
+    stack<long long> st;
+    long long mini;
 
-    MinStack() {
-        
-    }
+    MinStack() {}
     
     void push(int val) {
         if(st.empty()){
-            st.push({val, val});
-        } else {
-            st.push({val, min(st.top().second, val)});
+            st.push(val);
+            mini = val;
+        }
+        else if(val >= mini) st.push(val);
+        else{
+            st.push((long long) 2*val - mini);
+            mini=val;
         }
     }
     
     void pop() {
+        if(st.empty()) return;
+        long long topVal = st.top();
         st.pop();
+
+        if(topVal < mini){
+            // recover previous minimum
+            mini = 2 * mini - topVal;
+        }
     }
     
     int top() {
-        return st.top().first;
+        long long topVal = st.top();
+        if(topVal >= mini){
+            return topVal;
+        } else{
+            return mini; // encoded value, actual top is mini
+        }
     }
     
     int getMin() {
-        return st.top().second;
+        return mini;
     }
 };
 
