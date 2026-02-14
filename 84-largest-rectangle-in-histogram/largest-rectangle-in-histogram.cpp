@@ -1,46 +1,32 @@
 class Solution {
-    vector<int> previousSmallerElement(vector<int>& heights){
-        int n = heights.size();
-        vector<int> prev(n);
-        stack<int> st;
-        for(int i=0; i<n; i++)
-        {
-            while(!st.empty() && heights[st.top()] >= heights[i]) st.pop();
-            if(st.empty()) prev[i] = -1;
-            else prev[i] = st.top();
-
-            st.push(i);
-        }
-        return prev;
-    }
-
-    vector<int> nextSmallerElement(vector<int>& heights){
-        int n = heights.size();
-        vector<int> next(n);
-        stack<int> st;
-        for(int i=n-1; i>=0; i--)
-        {
-            while(!st.empty() && heights[st.top()] >= heights[i]) st.pop();
-            if(st.empty()) next[i] = n;
-            else next[i] = st.top();
-
-            st.push(i);
-        }
-        return next;
-    }
-
 public:
-    // TC: O(5N), SC: O(4N)
+    // TC: O(2N), SC: O(N)
     int largestRectangleArea(vector<int>& heights) {
-        vector<int> pse = previousSmallerElement(heights);
-        vector<int> nse = nextSmallerElement(heights);
-        int maxi = 0;
+        int maxArea = 0;
         int n = heights.size();
-        for(int i=0; i<n; i++)
+        stack<int> st;  // stack stores indices
+        for(int i=0; i<=n; i++)
         {
-            int width = heights[i] * (nse[i] - pse[i] - 1);
-            maxi = max(maxi, width);
+            // at i == n, we pretend height = 0
+            // this forces remaining bars to be processed
+            int currHeight = (i == n) ? 0 : heights[i];
+
+            // if current height is smaller,
+            // we found right boundary for stack top
+            while(!st.empty() && heights[st.top()] > currHeight)
+            {
+                int height = heights[st.top()];
+                st.pop();
+
+                int rightBoundary = i;
+                int leftBoundary = st.empty() ? -1 : st.top();
+
+                int width = rightBoundary - leftBoundary - 1;
+
+                maxArea = max(maxArea, height * width);
+            }
+            st.push(i);
         }
-        return maxi;
+        return maxArea;
     }
 };
