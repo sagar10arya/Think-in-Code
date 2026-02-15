@@ -22,31 +22,25 @@ class Solution {
 
 public:
     // TC: O(m*n) + O(2m)
-    // SC: O(m*n) + O(n)
+    // SC: O(m)  // space optimized
     int maximalRectangle(vector<vector<char>>& matrix) {
         if(matrix.empty()) return 0;
         int n = matrix.size();
         int m = matrix[0].size();
         int maxArea = 0;
-        vector<vector<int>> prefixSum(n, vector<int>(m,0));
-
-        for(int j=0; j<m; j++)
-        {
-            int sum = 0;
-            for(int i=0; i<n; i++)
-            {
-                if(matrix[i][j] == '1') sum += 1;
-                else sum = 0;
-                prefixSum[i][j] = sum;
-            }
-        }
+        
+        vector<int> height(m, 0);
 
         for(int i=0; i<n; i++)
         {
-            int largestHistRectangleArea = largestRectangleArea(prefixSum[i]);
-            maxArea = max(maxArea, largestHistRectangleArea);
-        }
+            for(int j=0; j<m; j++)
+            {
+                if(matrix[i][j] == '1') height[j] += 1;
+                else height[j] = 0;
+            }
 
+            maxArea = max(maxArea, largestRectangleArea(height));
+        }
         return maxArea;
     }
 };
